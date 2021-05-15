@@ -6,7 +6,6 @@ class Juego {
     turnoActual;
     tiradaTurnoActual;
     hiceSpare;
-    hiceStrike;
     vecesQueJugo;
     
     constructor() {
@@ -16,7 +15,6 @@ class Juego {
         this.tiradaTurnoActual = 0;               // Lleva la cuenta de la tirada del turno
         this.puntajeTotal = 0;
         this.hiceSpare = false;
-        this.hiceStrike = false;
         this.vecesQueJugo = 0;
 
     }
@@ -25,20 +23,21 @@ class Juego {
 
         this.vecesQueJugo++;
 
-        this.grillaPorTurno[this.tiradaTurnoActual] = pinosTumbados; //Pongo cuantos tumbó en la tirada
+        if (this.tiradaTurnoActual === 0 && pinosTumbados === 10) { //En la primer tirada hice strike
+            this.grillaPorTurno[this.tiradaTurnoActual] = pinosTumbados; //Pongo cuantos tumbó en la tirada
+            this.puntajeTotal += this.grillaPorTurno[this.tiradaTurnoActual];
 
+            this.tiradaTurnoActual = 0;
+            this.turnoActual++;
+            return;
+        };
+
+        this.grillaPorTurno[this.tiradaTurnoActual] = pinosTumbados; //Pongo cuantos tumbó en la tirada
         this.tiradaTurnoActual++;
 
         if (this.hiceSpare) {
             this.puntajeTotal += 10 + pinosTumbados;
             this.hiceSpare = false;
-        } else if (this.hiceStrike) {
-            this.puntajeTotal += pinosTumbados;
-            this.hiceStrike = false;
-        };
-
-        if (pinosTumbados === 10 && this.tiradaTurnoActual === 1) {
-            this.hiceStrike = true;
         };
 
         if (this.tiradaTurnoActual === 2) {         // Para saber si es la segunda tirada del turno
