@@ -1,9 +1,50 @@
 const {Juego} = require('../src/bowling');
 
-const jugar = (pinosTumbados) => {
+const juegoMalo = (pinosTumbados) => {
     let juego = new Juego();
 
-    for (let i = 1; i <= 20; i++) {
+    for (let tirada = 1; tirada <= 20; tirada++) {
+        juego.tirar(pinosTumbados);
+    };
+
+    return juego.score();
+};
+
+const juegoTumbaUno = (pinosTumbados) => {
+    let juego = new Juego();
+
+    for (let tirada = 1; tirada <= 20; tirada++) {
+        juego.tirar(pinosTumbados);
+    };
+
+    return juego.score();
+};
+
+const juegoAlMenosUnSpare = (pinosTumbados) => {
+    let juego = new Juego();
+
+    juego.tirar(pinosTumbados);
+    juego.tirar(pinosTumbados);
+    juego.tirar(pinosTumbados);
+
+    return juego.score();
+};
+
+const juegoAlMenosUnStrike = (pinosTumbados) => {
+    let juego = new Juego();
+
+    juego.tirar(pinosTumbados);
+    juego.tirar(pinosTumbados);
+    juego.tirar(pinosTumbados);
+
+    return juego.score();
+};
+
+
+const juegoPerfecto = (pinosTumbados) => {
+    let juego = new Juego();
+
+    for (let tirada = 1; tirada <= 12; tirada++) {
         juego.tirar(pinosTumbados);
     };
 
@@ -11,18 +52,28 @@ const jugar = (pinosTumbados) => {
 };
 
 
+
 describe ('Test juego de bowling', () => {
 
     it('Todos los tiros perdedores', () => {
-        expect(jugar(0)).toBe(0);
+        expect(juegoMalo(0)).toBe(0);
     });
 
     it('Todos los tiros derriba 1 bolo', () => {
-        expect(jugar(1)).toBe(20);
+        expect(juegoTumbaUno(1)).toBe(20);
     });
 
-    // it('Al menos un spare', () => {
-    //     expect(jugar(5)).toBe(150);
-    // })
+    it('Al menos un spare', () => {
+        expect(juegoAlMenosUnSpare(5)).toBe(15);
+    });
+
+    it('Al menos un strike', () => {
+        expect(juegoAlMenosUnStrike(10)).toBe(30);
+    });
+
+     it('Juego perfecto', () => {
+        expect(juegoPerfecto(10)).toBe(300);
+    }); 
+
 
 });
