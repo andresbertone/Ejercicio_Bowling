@@ -26,6 +26,10 @@ const juegoAlMenosUnSpare = (pinosTumbados) => {
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
+    for (let tirada = 1; tirada <= 17; tirada++) {
+        juego.tirar(0);
+    };
+
 
     return juego.score();
 };
@@ -36,6 +40,10 @@ const juegoAlMenosUnStrike = (pinosTumbados) => {
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
+    for (let tirada = 1; tirada <= 17; tirada++) {
+        juego.tirar(0);
+    };
+
 
     return juego.score();
 };
@@ -64,14 +72,14 @@ describe ('Test juego de bowling', () => {
     });
 
     it('Al menos un spare', () => {
-        expect(juegoAlMenosUnSpare(5)).toBe(15);
+        expect(juegoAlMenosUnSpare(5)).toBe(20);
     });
 
     it('Al menos un strike', () => {
         expect(juegoAlMenosUnStrike(10)).toBe(30);
     });
 
-     it('Juego perfecto', () => {
+    it('Juego perfecto', () => {
         expect(juegoPerfecto(10)).toBe(300);
     }); 
 

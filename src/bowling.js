@@ -6,56 +6,73 @@ class Juego {
     turnoActual;
     tiradaTurnoActual;
     hiceSpare;
-    vecesQueJugo;
+    hiceStrike;
+    rachaStrike;
     
     constructor() {
-        this.grillaJuegoGeneral = new Array(10);  // Es el arreglo para el anotador principal
-        this.grillaPorTurno = new Array(3);       // Es el arreglo para el anotador del turno
-        this.turnoActual = 0;                     // Lleva la cuenta del turno
-        this.tiradaTurnoActual = 0;               // Lleva la cuenta de la tirada del turno
+        this.grillaJuegoGeneral = [];             // Es el arreglo para el anotador principal
+        this.grillaPorTurno = [];                 // Es el arreglo para el anotador del turno
+        this.turnoActual = 1;                     // Lleva la cuenta del turno
+        this.tiradaTurnoActual = 1;               // Lleva la cuenta de la tirada del turno
         this.puntajeTotal = 0;
         this.hiceSpare = false;
-        this.vecesQueJugo = 0;
+        this.hiceStrike = false;
+        this.rachaStrike = false;                 //Si nunca dejó de hacer strike
 
     }
 
     tirar(pinosTumbados) {
 
-        this.vecesQueJugo++;
-
-        if (this.tiradaTurnoActual === 0 && pinosTumbados === 10) { //En la primer tirada hice strike
-            this.grillaPorTurno[this.tiradaTurnoActual] = pinosTumbados; //Pongo cuantos tumbó en la tirada
-            this.puntajeTotal += this.grillaPorTurno[this.tiradaTurnoActual];
-
-            this.tiradaTurnoActual = 0;
-            this.turnoActual++;
-            return;
-        };
-
-        this.grillaPorTurno[this.tiradaTurnoActual] = pinosTumbados; //Pongo cuantos tumbó en la tirada
-        this.tiradaTurnoActual++;
-
         if (this.hiceSpare) {
-            this.puntajeTotal += 10 + pinosTumbados;
+            this.grillaPorTurno.push(pinosTumbados); 
+            this.grillaJuegoGeneral.push(this.grillaPorTurno);
             this.hiceSpare = false;
+            this.grillaPorTurno = [];
         };
 
-        if (this.tiradaTurnoActual === 2) {         // Para saber si es la segunda tirada del turno
-            if (this.grillaPorTurno[this.tiradaTurnoActual - 2] + this.grillaPorTurno[this.tiradaTurnoActual - 1] === 10) { //Hice spare
+        if (this.tiradaTurnoActual === 1) {
+            if (pinosTumbados === 10) {
+                this.hiceStrike = true;
+            } else {
+                this.hiceStrike = false;
+            };
+            if (this.hiceStrike && this.grillaPorTurno.length === 3) {           //Hice strike
+                this.grillaJuegoGeneral.push(this.grillaPorTurno);
+                this.grillaPorTurno = [];
+            };
+            this.grillaPorTurno.push(pinosTumbados);               //Pongo cuantos tumbó en la tirada
+        }
+
+        if (this.tiradaTurnoActual === 2) {                         // Para saber si es la segunda tirada del turno
+            if (this.grillaPorTurno[this.tiradaTurnoActual - 2] + pinosTumbados === 10) { //Hice spare
+                this.grillaPorTurno.push(pinosTumbados);            //Pongo cuantos tumbó en la tirada 
                 this.hiceSpare = true;
             } else {
-                this.puntajeTotal += this.grillaPorTurno[0] + this.grillaPorTurno[1];
+                this.grillaPorTurno.push(pinosTumbados);            //Pongo cuantos tumbó en la tirada
+                this.grillaJuegoGeneral.push(this.grillaPorTurno);  //Metemos la grilla del turno en la general
             };
-            this.grillaJuegoGeneral[this.turnoActual] = this.grillaPorTurno; //Metemos la grilla del turno en la general
-            this.turnoActual++;
-            this.tiradaTurnoActual = 0;             // Reestablece valores de la tirada del turno
-            this.grillaPorTurno = new Array(3);     // Crea un nuevo arreglo para el anotador del turno
-        }
+            this.turnoActual++;                                     //Sumo para que pase al otro turno
+            this.tiradaTurnoActual = 1;                             // Reestablece valores de la tirada del turno
+            if (!this.hiceSpare) {
+                this.grillaPorTurno = [];                           // Crea un nuevo arreglo para el anotador del turno
+            };
+        } else {
+            if (this.hiceStrike) {
+                this.turnoActual++;                                     //Sumo para que pase al otro turno
+                this.tiradaTurnoActual = 1;                             // Reestablece valores de la tirada del turno
+            } else {
+                this.tiradaTurnoActual++;
+            };
+        };
 
     };
 
 
     score() {
+        console.log(this.grillaJuegoGeneral)
+        this.grillaJuegoGeneral.forEach(turno => {
+            this.puntajeTotal += turno.reduce((a,b) => a + b);
+        });
         return this.puntajeTotal;
     }
 
