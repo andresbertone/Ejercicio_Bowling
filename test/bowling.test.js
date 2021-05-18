@@ -26,7 +26,7 @@ const juegoAlMenosUnSpare = (pinosTumbados) => {
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
     juego.tirar(pinosTumbados);
-    for (let tirada = 1; tirada <= 17; tirada++) {
+    for (let tirada = 1; tirada <= 20; tirada++) {
         juego.tirar(0);
     };
 
